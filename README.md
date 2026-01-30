@@ -6,6 +6,25 @@ The project is fully productionized with a **FastAPI** web API, **SQLite** datab
 
 ---
 
+## 🛠️ Technology Stack
+
+This project uses a production-grade machine learning engineering stack:
+
+| Category | Technology | Purpose |
+|---|---|---|
+| **Core Runtime** | **Python 3.13** | Main programming language and environment. |
+| **API Serving** | **FastAPI** / **Uvicorn** / **Pydantic** | Web server framework, ASGI server, and input/output schema validation. |
+| **ML Modeling** | **XGBoost** / **LightGBM** | Base estimators for the tree-based regression ensemble. |
+| **ML Ensemble** | **scikit-learn** (`VotingRegressor`) | Meta-estimator combining predictions of XGBoost & LightGBM. |
+| **Explainable AI** | **SHAP** (`TreeExplainer`) | Feature attribution values to interpret predictions in actual USD. |
+| **Geospatial Processing** | **GeoPandas** / **Shapely** / **pyproj** | Great-circle distance calculations (Haversine) and geometric handling. |
+| **Clustering** | **scikit-learn** (`KMeans`) | Unsupervised neighborhood grouping based on coordinates. |
+| **Database** | **SQLite3** | Audit log database persisting request payloads and prediction histories. |
+| **DevOps / MLOps** | **Docker** / **Docker Compose** | Multi-stage container builds and container orchestration. |
+| **CI/CD** | **GitHub Actions** | Automation pipeline running unit tests and training on code push. |
+
+---
+
 ## 🎯 Key Features
 
 - **Geospatial Feature Engineering**: Calculates Haversine distances to major California economic hubs (Los Angeles, San Francisco, San Diego, San Jose) and performs spatial clustering using KMeans.
@@ -80,8 +99,8 @@ real-estate-market-intelligence-engine/
 
 1. **Clone the repository** and navigate to the project directory:
    ```bash
-   git clone https://github.com/shaleenswarup/real-estate-market-intelligence-engine.git
-   cd real-estate-market-intelligence-engine
+   git clone https://github.com/prakhar-bip/real-estate-valuation-engine.git
+   cd real-estate-valuation-engine
    ```
 
 2. **Create and activate a virtual environment**:
