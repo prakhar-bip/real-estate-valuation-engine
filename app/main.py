@@ -1,7 +1,8 @@
 """FastAPI Web Server for Real Estate Price Prediction.
 
 This server loads the trained ensemble model, scaling models, and SHAP explainer,
-initializes the SQLite log database, logs predictions, and exposes endpoints.
+initializes the SQLite log database, logs predictions, and exposes endpoints,
+including a premium web dashboard interface served at the root route.
 """
 
 import os
@@ -9,6 +10,7 @@ import pickle
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from app.schemas import PropertyPredictRequest, PropertyPredictResponse, ShapExplanation
 from src.features import add_geospatial_features, transform_features
 from src.database import init_db, log_prediction, get_recent_predictions
@@ -16,7 +18,7 @@ from src.database import init_db, log_prediction, get_recent_predictions
 app = FastAPI(
     title="California Real Estate Market Intelligence API",
     description="A FastAPI service providing ensemble-based real estate price predictions, SQLite logs, and SHAP-based interpretations.",
-    version="1.1.0"
+    version="1.2.0"
 )
 
 # Global variables to store loaded models
@@ -62,6 +64,17 @@ def load_models_and_db():
         shap_explainer = pickle.load(f)
         
     print("All models loaded successfully!")
+
+@app.get("/", response_class=HTMLResponse)
+def read_root():
+    """Serve the interactive web dashboard interface."""
+    template_path = os.path.join("app", "templates", "index.html")
+    if not os.path.exists(template_path):
+        raise HTTPException(status_code=404, detail="Dashboard UI template file not found.")
+        
+    with open(template_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
 
 @app.get("/health")
 def health_check():
@@ -139,7 +152,6 @@ def predict_price(request: PropertyPredictRequest):
         explanations.sort(key=lambda x: abs(x.effect_usd), reverse=True)
 
         # Log prediction query and results to SQLite for audit/monitoring
-        # Get the top contributing feature details
         top_feature = explanations[0].feature
         top_feature_effect = explanations[0].effect_usd
         
@@ -160,7 +172,6 @@ def predict_price(request: PropertyPredictRequest):
                 top_feature_effect=top_feature_effect
             )
         except Exception as db_err:
-            # We don't want to fail the API call if logging fails, but print the error
             print(f"Failed to log prediction to database: {db_err}")
 
         return PropertyPredictResponse(

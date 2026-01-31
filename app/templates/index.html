@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>California Real Estate Market Intelligence</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0b0f19;
+            --bg-surface: rgba(17, 25, 40, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #8b5cf6;
+            --secondary-glow: rgba(139, 92, 246, 0.5);
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1.1fr 1.9fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 1.2rem;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            cursor: pointer;
+        }
+
+        .helper-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            height: 100%;
+        }
+
+        .price-display {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .price-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 0.5rem;
+            text-shadow: 0 0 20px var(--primary-glow);
+            letter-spacing: -0.02em;
+        }
+
+        .price-placeholder {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .shap-chart-container {
+            display: none;
+        }
+
+        .shap-item {
+            margin-bottom: 1rem;
+        }
+
+        .shap-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .shap-bar-bg {
+            height: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 7px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .shap-bar-fill {
+            height: 100%;
+            border-radius: 7px;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+
+        .shap-bar-fill.positive {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+        }
+
+        .shap-bar-fill.negative {
+            background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+        }
+
+        .shap-description {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .history-section {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-positive {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .badge-negative {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>California Property Intelligence</h1>
+        <p>Ensemble Model Prediction Dashboard & SHAP Interpretability Engine</p>
+    </header>
+
+    <main>
+        <!-- Left Column: Input Panel -->
+        <section class="card">
+            <h2 class="card-title">Property Inputs</h2>
+            
+            <form id="prediction-form">
+                <div class="form-group">
+                    <label for="location-preset">Quick Location Preset</label>
+                    <select id="location-preset" onchange="applyPreset()">
+                        <option value="">-- Choose a Preset Region --</option>
+                        <option value="bay_area">San Francisco / Bay Area</option>
+                        <option value="los_angeles">Los Angeles Metro</option>
+                        <option value="san_diego">San Diego Coastal</option>
+                        <option value="sacramento">Sacramento Valley</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="latitude">Latitude</label>
+                        <input type="number" step="0.0001" id="latitude" required min="32.5" max="42.5">
+                        <span class="helper-text">Bounds: 32.5 to 42.5</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="longitude">Longitude</label>
+                        <input type="number" step="0.0001" id="longitude" required min="-124.5" max="-114.0">
+                        <span class="helper-text">Bounds: -124.5 to -114.0</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="median-income">Median Income (in $10k)</label>
+                    <input type="number" step="0.01" id="median-income" required min="0.5" max="15.0" oninput="updateIncomeHelper()">
+                    <span class="helper-text" id="income-helper">Calculates to: $0.00</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="house-age">House Age (Years)</label>
+                        <input type="number" step="1" id="house-age" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="occupancy">Avg Occupancy / House</label>
+                        <input type="number" step="0.1" id="occupancy" required min="1" max="10">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rooms">Avg Rooms</label>
+                        <input type="number" step="0.1" id="rooms" required min="1" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="bedrooms">Avg Bedrooms</label>
+                        <input type="number" step="0.1" id="bedrooms" required min="0.5" max="10">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="population">Local Population</label>
+                    <input type="number" step="10" id="population" required min="10" max="50000">
+                </div>
+
+                <button type="submit" id="submit-btn">Predict & Explain Valuation</button>
+            </form>
+        </section>
+
+        <!-- Right Column: Results Panel -->
+        <section class="card">
+            <h2 class="card-title">Analysis & Insights</h2>
+            
+            <div class="result-container">
+                <div class="loader" id="loader"></div>
+                
+                <!-- Price Box -->
+                <div class="price-display" id="price-display">
+                    <div class="price-placeholder" id="price-placeholder">Fill in property specifications and press "Predict"</div>
+                    <div style="display: none;" id="price-result-wrapper">
+                        <span style="font-size: 1rem; color: var(--text-muted); text-transform: uppercase;">Estimated Value</span>
+                        <div class="price-value" id="predicted-price">$0</div>
+                    </div>
+                </div>
+
+                <!-- SHAP Explainers list -->
+                <div class="shap-chart-container" id="shap-chart-container">
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-bottom: 1rem;">Primary Valuation Drivers (SHAP Explanations)</h3>
+                    <div id="shap-explanations-list">
+                        <!-- Items dynamically generated -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Section: History logs -->
+    <section class="card history-section">
+        <h2 class="card-title">Prediction Activity Logs</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Coordinates</th>
+                        <th>Med. Income</th>
+                        <th>House Age</th>
+                        <th>Est. Valuation</th>
+                        <th>Primary Driver</th>
+                    </tr>
+                </thead>
+                <tbody id="history-rows">
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted);">No records found. Submit a query to log a prediction.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script>
+        // Preset values for major California regions
+        const PRESETS = {
+            bay_area: { lat: 37.7749, lon: -122.4194, income: 8.5, age: 35, occupancy: 2.6, rooms: 6.2, bedrooms: 1.1, pop: 1200 },
+            los_angeles: { lat: 34.0522, lon: -118.2437, income: 6.0, age: 28, occupancy: 3.1, rooms: 5.4, bedrooms: 1.05, pop: 2400 },
+            san_diego: { lat: 32.7157, lon: -117.1611, income: 7.2, age: 22, occupancy: 2.7, rooms: 5.8, bedrooms: 1.1, pop: 950 },
+            sacramento: { lat: 38.5816, lon: -121.4944, income: 4.8, age: 30, occupancy: 2.8, rooms: 5.5, bedrooms: 1.0, pop: 1600 }
+        };
+
+        // Apply selected preset values
+        function applyPreset() {
+            const presetKey = document.getElementById("location-preset").value;
+            if (!presetKey || !PRESETS[presetKey]) return;
+            
+            const p = PRESETS[presetKey];
+            document.getElementById("latitude").value = p.lat;
+            document.getElementById("longitude").value = p.lon;
+            document.getElementById("median-income").value = p.income;
+            document.getElementById("house-age").value = p.age;
+            document.getElementById("occupancy").value = p.occupancy;
+            document.getElementById("rooms").value = p.rooms;
+            document.getElementById("bedrooms").value = p.bedrooms;
+            document.getElementById("population").value = p.pop;
+            
+            updateIncomeHelper();
+        }
+
+        // Live calculation display for median income
+        function updateIncomeHelper() {
+            const incomeVal = document.getElementById("median-income").value;
+            const helper = document.getElementById("income-helper");
+            if (incomeVal) {
+                const actualDollars = parseFloat(incomeVal) * 10000;
+                helper.innerText = `Calculates to: $${actualDollars.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            } else {
+                helper.innerText = "Calculates to: $0.00";
+            }
+        }
+
+        // Form Submission
+        document.getElementById("prediction-form").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            // Toggle view elements
+            document.getElementById("price-placeholder").style.display = "none";
+            document.getElementById("price-result-wrapper").style.display = "none";
+            document.getElementById("shap-chart-container").style.display = "none";
+            document.getElementById("loader").style.display = "block";
+            
+            const payload = {
+                latitude: parseFloat(document.getElementById("latitude").value),
+                longitude: parseFloat(document.getElementById("longitude").value),
+                median_income: parseFloat(document.getElementById("median-income").value),
+                house_age: parseFloat(document.getElementById("house-age").value),
+                occupancy: parseFloat(document.getElementById("occupancy").value),
+                rooms: parseFloat(document.getElementById("rooms").value),
+                bedrooms: parseFloat(document.getElementById("bedrooms").value),
+                population: parseFloat(document.getElementById("population").value)
+            };
+
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error("Prediction API call failed.");
+                }
+                
+                const data = await response.json();
+                
+                // Update price value
+                document.getElementById("predicted-price").innerText = `$${data.predicted_price.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("price-result-wrapper").style.display = "block";
+                
+                // Build SHAP bar charts
+                buildShapChart(data.shap_explanations);
+                
+                // Reload history logs
+                fetchHistory();
+
+            } catch (error) {
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("price-placeholder").style.display = "block";
+                document.getElementById("price-placeholder").innerText = `Error: ${error.message}`;
+            }
+        });
+
+        // Construct SHAP Bar charts dynamically
+        function buildShapChart(explanations) {
+            const list = document.getElementById("shap-explanations-list");
+            list.innerHTML = "";
+            
+            // Find max absolute value to scale bars relatively
+            const maxVal = Math.max(...explanations.map(x => Math.abs(x.effect_usd)));
+            
+            explanations.forEach(exp => {
+                const percentage = Math.min(100, Math.max(5, (Math.abs(exp.effect_usd) / maxVal) * 100));
+                const signClass = exp.effect_usd > 0 ? "positive" : "negative";
+                const effectText = (exp.effect_usd > 0 ? "+" : "-") + `$${Math.abs(exp.effect_usd).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                
+                const itemHtml = `
+                    <div class="shap-item">
+                        <div class="shap-header">
+                            <span style="font-weight: 500;">${exp.feature.replace("_", " ").toUpperCase()}</span>
+                            <span style="font-weight: 600; color: ${exp.effect_usd > 0 ? "#34d399" : "#f87171"};">${effectText}</span>
+                        </div>
+                        <div class="shap-bar-bg">
+                            <div class="shap-bar-fill ${signClass}" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="shap-description">${exp.description}</div>
+                    </div>
+                `;
+                list.insertAdjacentHTML("beforeend", itemHtml);
+            });
+            
+            document.getElementById("shap-chart-container").style.display = "block";
+        }
+
+        // Fetch recent predictions from history endpoint
+        async function fetchHistory() {
+            try {
+                const response = await fetch("/predictions?limit=6");
+                if (!response.ok) return;
+                
+                const data = await response.json();
+                const tbody = document.getElementById("history-rows");
+                
+                if (data.history.length === 0) {
+                    return;
+                }
+                
+                tbody.innerHTML = "";
+                data.history.forEach(row => {
+                    // format time
+                    const date = new Date(row.timestamp);
+                    const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+                    
+                    const signClass = row.top_feature_effect > 0 ? "badge-positive" : "badge-negative";
+                    const signText = row.top_feature_effect > 0 ? "+" : "-";
+                    const effectVal = `${signText}$${Math.abs(row.top_feature_effect).toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+                    
+                    const trHtml = `
+                        <tr>
+                            <td>${timeStr}</td>
+                            <td>${row.latitude.toFixed(3)}, ${row.longitude.toFixed(3)}</td>
+                            <td>$${(row.median_income * 10000).toLocaleString()}</td>
+                            <td>${row.house_age} yrs</td>
+                            <td style="font-weight: 600;">$${row.predicted_price.toLocaleString(undefined, {maximumFractionDigits: 0})}</td>
+                            <td>
+                                <span class="badge ${signClass}">
+                                    ${row.top_feature.replace("_", " ")} (${effectVal})
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML("beforeend", trHtml);
+                });
+            } catch (err) {
+                console.log("Error loading history logs: ", err);
+            }
+        }
+
+        // Initialize history list on page load
+        window.onload = function() {
+            fetchHistory();
+        };
+    </script>
+</body>
+</html>
